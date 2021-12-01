@@ -1,26 +1,26 @@
-import logo from './logo.svg';
-import './App.css';
+import { Component } from "react";
+import BoardView from "./components/BoardView.jsx";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-          Im Here
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {counter: 0};
+        this.onBoardUpdate = this.onBoardUpdate.bind(this);
+        props.cars.setRedrawCallback(this.onBoardUpdate);
+    }
+
+    onBoardUpdate(counter) {
+        this.setState({counter: counter});
+    }
+
+    render() {
+        const data = {
+            counter: this.state.counter,
+            cars: this.props.cars
+        };
+
+        return ( <BoardView {...data} /> );
+    }
 }
 
 export default App;
