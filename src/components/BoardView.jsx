@@ -3,8 +3,24 @@ import React, {Component} from 'react';
 import {WID, HGT, GRID, WALL} from '../utils/constants.js';
 import Square from './Square.jsx';
 import CarView from "../components/CarView.jsx";
+import YouWon from "../components/YouWon.jsx";
+import ButtonView from './ButtonView.jsx';
 
 class BoardView extends Component{
+    constructor(props) {
+        super(props);
+        this.handleNext = this.handleNext.bind(this);
+        this.handleReset = this.handleReset.bind(this);
+    }
+
+    handleNext(event) {
+        this.props.cars.nextPuzzle();
+    }
+
+    handleReset(event) {
+        this.props.cars.resetPuzzle();
+    }
+
     render() {
         const bWid = WID * GRID;
         const bHgt = HGT * GRID;
@@ -45,6 +61,29 @@ class BoardView extends Component{
                         idNum={id}
                         cars={this.props.cars}
                     />);
+        }
+
+        const specialStyle = {
+            position: 'absolute',
+            top: HGT*GRID,
+            left: 125,
+            padding: 15,
+        }
+
+        list.push(
+            <div>
+                <table>
+                    <tr>
+                        <td><ButtonView name={"Next"} y={75} onClick={this.handleNext} cars={this.props.cars}/></td>
+                        <td><ButtonView name={"Reset"} onClick={this.handleReset}/></td>
+                        <td style={specialStyle}>Level: {this.props.cars.getPuzzleNumber()}</td>
+                    </tr>
+                </table>
+            </div>
+        )
+
+        if (cars.hasWon()) {
+            list.push(<YouWon cx={WID*GRID/2} cy={HGT*GRID/2} cars={this.props.cars}/>);
         }
 
         return ( 
